@@ -1,0 +1,302 @@
+API documentation
+
+coffeeAPI: 1.0.0
+info:
+	title: coffee API
+	description: API to keep track of coffee order
+	version: 1.0.0
+
+servers:
+	-http://127.0.0.1:5000
+
+paths:
+	/orders
+		POST:
+			description: create a new order
+			Query Parameters:
+				-types: types of drink
+				 required: true
+				-cost: order cost, must be numeric value
+				 required: true
+				-additions: extras
+				 required: optional
+
+			example response:
+				input:
+					/orders?types=cappucino&cost=5
+					/orders?types=cappucino&cost=5&additions=milk
+				'201':
+					{
+					  "id": 1,
+					  "cost": 5
+					  "links": link for payment page
+					},
+
+
+				input:   /orders?types=cappucino&cost=5erty
+				'400':
+					{
+						error: "Invalid input: COST input value should be numeric"
+					}
+
+
+				input:   /orders?additions=green_tea
+				'400': 
+					{
+						error: "missing required field: TYPES and COST"
+					}
+
+
+	/orders/<number>
+		GET:
+			parameters:
+				-number: order id
+				 required: true
+			description:
+				return an order detail by number
+			example response:
+				input: /orders/10
+				'200':
+					{
+					  "id": 10,
+					  "cost": total amount
+					  "status": order_status, 
+					  "types": coffee_types,
+					  "additions": None, 
+					 },
+
+				input: /orders/10000000000000   #non-existent order
+				'404':
+					{
+						number: False
+					}
+
+
+		PUT:
+			parameters:
+				-number: order_id
+				 required: true
+			description:
+				modify order details, only before status is paid or prepared
+			Query parameters:
+				-types: coffee type
+				 required: optional
+				-cost: total amount, has to be numerical values
+				 required: optional
+				-additions:
+				 required: optional
+				-status: status of order: "unpaid", "paid", "prepared"
+				 required: optional
+			
+			example response:
+				input:   /orders/1?additions=milk   #order 1 status is unpaid
+				'200':
+					{
+					  "id": 1,
+					  "cost": updated_cost,
+					  "status": status, 
+					  "types": coffee types,
+					  "additions": milk
+					 },
+
+				input: /orders/1?additions=milk   #order 1 status is paid or prepared
+				'409':{
+						error: "Invalid operation: Order cannot be changed"
+					}
+
+				input: /orders/1?types=late&cost=3er
+				'400':
+					{
+						error:"Invalid input: COST input value should be numeric"
+					}
+
+				input: /orders/300000?additions=milk  #non-existent order number
+				'404':
+					{
+						number: False
+					}
+		
+
+
+		DELETE:
+			parameters:
+				-number: order id
+				 required: true
+			description:
+				cancelled an order by number, can only be done before payment, barista prepared the drink or order not yet cancelled
+			example response:
+				input: /orders/1        #order status before paid
+				'200':
+					{
+						delete: 1
+					}
+
+				input: /orders/1        #order status is paid already
+				'409':
+					{
+					  error: "Conflict: order cannot be cancelled"
+					}
+
+				input: /orders/1000000000        #non-existent order
+				'404':
+					{
+					  "number": false
+					}
+
+
+
+	/open_orders
+		GET:
+			description:
+				return a list of open_orders
+			response:
+				'200':
+					[{
+					  "id": 1,
+					  "cost": total amount
+					  "status": "paid", 
+					  "types": coffee types,
+					  "additions": None, 
+					 },,
+
+					{
+					  "id": 2,
+					  "cost": total amount
+					  "status": "unpaid", 
+					  "types": coffee types,
+					  "additions": None, 
+					 },,
+					.......]
+
+
+
+	/orderlist/<status>
+		GET:
+			parameters:
+				-status: satus of order: "unpaid", "paid", "prepared", "cancelled"
+				 required: true
+			description:
+				return a list of orders by status
+	
+			example response:
+				input: /orderlist/prepared
+				'200':
+					[{
+					  "id": 1,
+					  "cost": total amount
+					  "status": prepared, 
+					  "types": coffee types,
+					  "additions": None, 
+					 },
+
+					{
+					  "id": 2,
+					  "cost": total amount
+					  "status": prepared, 
+					  "types": coffee types,
+					  "additions": None, 
+					},
+					.......]
+
+				input: /orderlist/rubbish
+				'400':
+					{
+					  "error": "Invalid input: status must be 'paid', 'unpaid', 'cancelled' or 'prepared'"
+					}
+
+
+
+	/payments/<number>
+		GET:
+			parameters:
+				-number: order id
+				 required: true
+			description:
+				return payment details of an order by number
+			
+			example response:
+				input: /payments/10
+				'200':
+					{
+					  "id": 10,
+					  "payment_type": "cash" or "card", 
+					  "amount": total paid, 
+					  "card_expiry": null, 
+					  "card_name": null, 
+					  "card_no": null, 
+					  "status": "paid"
+					}
+
+				input: /payments/1000000000000   #non-existent order
+				'404':
+					{
+					  "number": false
+					}
+
+		PUT:
+			parameters:
+				-number: order id
+				 required: true
+
+			description:
+				modify payment detail
+
+			QueryString parameter:
+				-payment_type: card or cash
+				 required: true
+				-card_no: card number, must be 12 digits number
+				 required: if payment_type is card
+				-card_name: holder of card
+				 required: if payment_type is card
+				-card_expiry: card expiry date
+				 required: if payment_type is card
+
+			example response:
+				input: /payments/10?payment_type=cash
+				'200':{
+					"id": 10,
+					"payment_type": cash, 
+					"amount": total paid, 
+					"card_expiry": none, 
+					"card_name": none, 
+					"card_no": none, 
+					"status": "paid"
+				},
+
+				input: /payments/10?payment_type=card&card_name=dave&card_expirt=2020&card_no=123456789012
+				'200':{
+					"id": 10,
+					"payment_type": card, 
+					"amount": total paid, 
+					"card_expiry": 2020, 
+					"card_name": dave, 
+					"card_no": 123456789012, 
+					"status": "paid"
+				},
+
+
+				input: /payments/10
+				'400':{
+					error:"Missing required field: PAYMENT_TYPE"
+				},
+
+				input: /payments/10?payment_type=applepay
+				'400': {
+					error:"Invalid input: 'CARD' or 'CASH' in PAYMENT_TYPE"
+				},
+
+				input: /payments/10?payment_type=card
+				'400':{
+					error:"Missing required field: CARD_NO or CARD_NAME, CARD_EXPIRY" ##when payment_type is card
+				},
+
+				input: /payments/10?payment_type=card&card_name=dave&card_expirt=2020&card_no=12345
+				'400': {
+					error:"Invalid input: Card_NO should be of 12 digits number"
+				}
+
+				input: /payments/10000000000000?payment_type=cash   #non-existent payment
+				'404':{
+					number: False
+				}
+
