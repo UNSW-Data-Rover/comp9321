@@ -1,0 +1,12 @@
+'/getallevents/'
+Get basic information of every World Cup
+
+'/getfinalstats/'
+Get basic stats of all finals,data source:
+
+'/querybycountry/<country>'
+Get country profiles by country name
+
+Data sources:
+https://www.kaggle.com/ahmedelnaggar/fifa-worldcup-2018-dataset
+http://data.un.org/CountryProfile.aspx/en/index.html/
