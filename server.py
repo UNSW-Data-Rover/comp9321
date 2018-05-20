@@ -33,7 +33,7 @@ def getallevents():
     for item in data:
         item.pop('_id')
         cup_dict.append(item)
-    return jsonify(cup_dict)
+    return jsonify(cup_dict),{'Access-Control-Allow-Origin': '*'}
      ##with open('static/events.json', 'r') as f:
         ##load_dict = json.load(f)
         ##return jsonify(load_dict)
@@ -65,7 +65,7 @@ def getfinalstats():
     for item in data:
         item.pop('_id')
         final_dict.append(item)
-    return jsonify(final_dict)
+    return jsonify(final_dict),{'Access-Control-Allow-Origin': '*'}
     ##with open('static/matches.json', 'r') as f:
         ##load_dict = json.load(f)
         ##for item in load_dict:
@@ -121,7 +121,7 @@ def querybycountry(country):
     for item in data:
         item.pop('_id')
         country_dict.append(item)
-    return jsonify(country_dict)
+    return jsonify(country_dict),{'Access-Control-Allow-Origin': '*'}
     ##filename = 'static/' + country + '.json'
     ##with open(filename, 'w') as f:
         ##f.write(json.dumps(new_dict, sort_keys=False, indent=4, separators=(',', ': ')))
