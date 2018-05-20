@@ -3,7 +3,7 @@ var url = "http://127.0.0.1:5000/";
 function initialize() {
     var mapProp = {
         center: new google.maps.LatLng(55.7558, 37.6173),
-        zoom: 5,
+        zoom: 10,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);

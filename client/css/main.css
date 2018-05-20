@@ -32,7 +32,9 @@
     margin-bottom: -5px;
     font-family: 'Verdana';
 }
-
+.section-nav:hover{
+    color: #cccccc;
+}
 .section-container{
     background-image: url(//img.fifa.com/images/fwc/2018/bg.jpg);
     background-color: #fff;
@@ -48,6 +50,15 @@
     position: relative;
     text-align: center;
     float: left;
+}
+
+.section-table1{
+    background-color: #fff;
+    max-width: 1200px;
+    min-width: auto;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
 }
 
 .section-country{
@@ -74,6 +85,14 @@
     max-width: 210px;
 }
 
+.section-contrast{
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    min-width: auto;
+    max-height: 200px;
+}
+
 .table thead th {
     vertical-align: bottom;
     border-top:none;
@@ -85,3 +104,36 @@
     border-bottom: 1px solid rgba(0,0,0,.075);
 }
 
+.ribbon {
+    background-color: #a00;
+    overflow: hidden;
+    white-space: nowrap;
+    /* top left corner */
+    position: fixed;
+    right: -60px;
+    top: 50px;
+    /* 45 deg ccw rotation */
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    /* shadow */
+    -webkit-box-shadow: 0 0 10px #888;
+    -moz-box-shadow: 0 0 10px #888;
+    box-shadow: 0 0 10px #888;
+    z-index: 999;
+}
+
+.ribbon a {
+    border: 1px solid #faa;
+    color: #fff;
+    display: block;
+    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    /* shadow */
+    text-shadow: 0 0 5px #444;
+}
