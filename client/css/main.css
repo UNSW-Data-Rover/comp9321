@@ -40,6 +40,8 @@
     background-color: #fff;
     background-repeat: repeat-x;
     background-position: center 0;
+    max-width: 100%;
+    margin-left: 0px;
 }
 
 .section-table{

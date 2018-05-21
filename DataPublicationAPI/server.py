@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/getallevents/', methods=['GET'])
 def getallevents():
     rows = []
-    with open('WorldCups.csv') as f:
+    with open('DataPublicationAPI/WorldCups.csv') as f:
         reader = csv.DictReader(f)
         for row in reader:
             rows.extend([{'Year': row['Year'], 'Country': row['Country'], 'Champion': row['Winner'],
@@ -43,7 +43,7 @@ def getallevents():
 def getfinalstats():
     rows = []
     result = []
-    with open('WorldCupMatches.csv') as f:
+    with open('DataPublicationAPI/WorldCupMatches.csv') as f:
         reader = csv.DictReader(f)
         for row in reader:
             if row['Stage'] == 'Final':
