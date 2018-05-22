@@ -41,10 +41,16 @@ var setVeiwPort = function () {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
+
+
+
 var v = new Vue({
-    el: '#table1',
+    el: '#index',
     data: {
-        rows: ''
+        rows: '',
+        message: 'hi',
+        country: 'germany',
+        c : {}
     },
     mounted: function () {
         var self = this;
@@ -59,5 +65,33 @@ var v = new Vue({
                 console.log(error);
             }
         });
+        this.info();
+    },
+  
+    methods: {
+        info : function(){
+            this.message=this.country;
+
+            var self = this;
+            $.ajax({
+                url: url + 'querybycountry/'+this.country,
+                method: 'GET',
+                success: function (data) {
+                    self.c=data[0];
+                    console.log(self.c);
+                    console.log('currency');
+                    console.log(self.c.Region);
+
+                    self.message='bye'
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+           
+        }
     }
 });
+
+
