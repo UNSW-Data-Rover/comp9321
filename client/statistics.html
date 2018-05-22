@@ -26,6 +26,7 @@
                 <li class="col-ml-5" style="list-style:none;"><a title="Statistics" href="statistics.html"><span class="section-nav">Statistics</span></a></li>
             </ul>
         </div>
+    </div>
 </div>
 <div class="ribbon">
     <a href="https://github.com/UNSW-Data-Rover/comp9321" target="_blank">View Source on GitHub</a>
@@ -54,6 +55,33 @@
 
 
 
+<div id="stat">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+  <a class="navbar-brand" href="#">Compare two countries</a>
+  
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto" style="text-align:center">
+      <li class="nav-item active">
+        <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Brazil" aria-label="Search" v-model="compare_country1">
+      <button class="btn btn btn-outline-light  my-2 my-sm-0"  @click.prevent="compare">Compare</button> <br>
+    </form>
+       </li>&emsp;
+      
+      <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Germany" aria-label="Search" v-model="compare_country2">
+      <button class="btn btn btn-outline-light my-2 my-sm-0"  @click.prevent="compare">Compare</button>
+    </form>
+      </li>
+     
+    </ul>
+  </div>
+</nav>
+
 
 <div class="section-container">
     <div class="section-contrast">
@@ -62,13 +90,13 @@
                 <img class="country-flag" src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/720px-Flag_of_Brazil.svg.png">
             </div>
             <div class = "col-1">
-                <h1>60%</h1>
+                <h1>{{ratio1}}</h1>
             </div>
             <div class = "col-4">
             <!-- bar chart-->
             </div>
             <div class = "col-2">
-                <h1>40%</h1>
+                <h1>{{ratio2}}</h1>
             </div>
             <div class = "col-2">
                 <img class="country-flag" src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/800px-Flag_of_Italy.svg.png">
@@ -82,25 +110,25 @@
                 <thead>
                 <tr>
                     <th scope="col">Year</th>
-                    <th scope="col">Datetime</th>
                     <th scope="col">Stage</th>
-                    <th scope="col">Stadium</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Home Team Name</th>
+                    <th scope="col">Home Team</th>
                     <th scope="col">Home Team Goals</th>
+                    <th scope="col">Away Team</th>
                     <th scope="col">Away Team Goals</th>
-                    <th scope="col">Away Team Name</th>
+                   
                 </tr>
                 </thead>
                 <tbody>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
-                <tr><td>1970</td><td>21 Jun 1970 - 12:00</td><td>Final</td><td>Estadio Azteca</td><td>Mexico City</td><td>Brazil</td><td>4</td><td>1</td><td>Italy</td></tr>
+                
+                <tr v-for="r in statistics">
+                    <td>{{ r["Year"] }}</td>
+                    <td>{{ r["Stage"] }}</td>
+                    <td>{{ r["Home Team"] }}</td>
+                    <td>{{ r["Home Team Goals"] }}</td>
+                    <td>{{ r["Away Team"]}}</td>
+                    <td>{{ r["Away Team Goals"] }}</td>
+
+                </tr>
 
                 </tbody>
             </table>
@@ -109,9 +137,9 @@
 
 
 
-
-
 </div>
+
+
 </body>
-<script src="js/main.js"></script>
+<script src="js/stats.js"></script>
 </html>

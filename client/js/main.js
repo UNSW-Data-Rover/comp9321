@@ -49,7 +49,7 @@ var v = new Vue({
     data: {
         rows: '',
         message: 'hi',
-        country: 'germany',
+        country: 'russia',
         c : {}
     },
     mounted: function () {
@@ -70,18 +70,13 @@ var v = new Vue({
   
     methods: {
         info : function(){
-            this.message=this.country;
-
             var self = this;
             $.ajax({
                 url: url + 'querybycountry/'+this.country,
                 method: 'GET',
                 success: function (data) {
                     self.c=data[0];
-                    console.log(self.c);
-                    console.log('currency');
-                    console.log(self.c.Region);
-
+                  
                     self.message='bye'
 
                 },
