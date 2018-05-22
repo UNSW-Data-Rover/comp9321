@@ -49,8 +49,16 @@ var v = new Vue({
     data: {
         rows: '',
         message: 'hi',
-        country: 'russia',
-        c : {}
+        country: 'Russia',
+        c : {},
+        code: 'RU'
+    },
+    computed: {
+        img_code: function(){
+            var imgcode= "../client/svg/"+this.code+".svg";
+            console.log(imgcode);
+            return imgcode;
+        }
     },
     mounted: function () {
         var self = this;
@@ -76,8 +84,7 @@ var v = new Vue({
                 method: 'GET',
                 success: function (data) {
                     self.c=data[0];
-                  
-                    self.message='bye'
+                    self.code=data[0]['CountryCode'];
 
                 },
                 error: function (error) {
