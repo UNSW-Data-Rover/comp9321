@@ -132,8 +132,8 @@ def querybycountry(country):
         region = 'Germany'
     elif country == 'Korea Republic':
         region = 'Republic%20of%20Korea'
-    elif country == 'Soviet Union':
-        region = 'Russian%Federation'
+    elif country == 'Soviet Union' or 'Russia':
+        region = 'Russian%20Federation'
     elif country == 'England':
         region = 'United%20Kingdom'
     else:
