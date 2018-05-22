@@ -1,8 +1,8 @@
 '/getallevents/'
 Get basic information of every World Cup
 
-'/getfinalstats/'
-Get basic stats of all finals,data source:
+'/getstats/<A&B>'
+Get all matches between country A and country B
 
 '/querybycountry/<country>'
 Get country profiles by country name

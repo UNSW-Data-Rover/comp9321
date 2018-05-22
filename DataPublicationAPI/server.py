@@ -4,22 +4,21 @@ from bs4 import BeautifulSoup
 import urllib.request
 from pymongo import MongoClient
 
-
 app = Flask(__name__)
 
 
 @app.route('/getallevents/', methods=['GET'])
 def getallevents():
     rows = []
-    with open('DataPublicationAPI/WorldCups.csv') as f:
+    with open('WorldCups.csv') as f:
         reader = csv.DictReader(f)
         for row in reader:
             rows.extend([{'Year': row['Year'], 'Country': row['Country'], 'Champion': row['Winner'],
                           'Runners-Up': row['Runners-Up'], 'Third': row['Third'], 'Fourth': row['Fourth'],
                           'TotalGoals': row['GoalsScored'], 'QualifiedTeams': row['QualifiedTeams'],
-                          'MatchesPlayed': row['MatchesPlayed'],'Attendance': row['Attendance']}])
+                          'MatchesPlayed': row['MatchesPlayed'], 'Attendance': row['Attendance']}])
     ##with open('static/events.json', 'w') as f:
-        ##f.write(json.dumps(rows, sort_keys=False, indent=4, separators=(',', ': ')))
+    ##f.write(json.dumps(rows, sort_keys=False, indent=4, separators=(',', ': ')))
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
     allcups = db['allcups']
@@ -27,51 +26,99 @@ def getallevents():
         for item in rows:
             allcups.insert_one(item)
     else:
-        pass
+        for item in rows:
+            allcups.update_one(filter={'Year': item['Year']}, update={'$set': item})
     data = allcups.find()
     cup_dict = []
     for item in data:
         item.pop('_id')
         cup_dict.append(item)
-    return jsonify(cup_dict),{'Access-Control-Allow-Origin': '*'}
-     ##with open('static/events.json', 'r') as f:
-        ##load_dict = json.load(f)
-        ##return jsonify(load_dict)
+    return jsonify(cup_dict)
+    ##with open('static/events.json', 'r') as f:
+    ##load_dict = json.load(f)
+    ##return jsonify(load_dict)
 
 
-@app.route('/getfinalstats/', methods=['GET'])
-def getfinalstats():
+##@app.route('/getfinalstats/', methods=['GET'])
+##def getfinalstats():
+##rows = []
+##result = []
+##with open('WorldCupMatches.csv') as f:
+##reader = csv.DictReader(f)
+##for row in reader:
+##if row['Stage'] == 'Final':
+##rows.extend([{'Year': row['Year'], 'Stage': row['Stage'], 'Home Team': row['Home Team Name'],
+##'Home Team Goals': row['Home Team Goals'], 'Away Team Goals': row['Away Team Goals'],
+##'Away Team': row['Away Team Name'], }])
+##with open('static/matches.json', 'w') as f:
+##f.write(json.dumps(rows, sort_keys=False, indent=4, separators=(',', ': ')))
+##client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
+##db = client.get_database()
+##allfinals = db['allfinals']
+##if allfinals.find().count() == 0:
+##for item in rows:
+## allfinals.insert_one(item)
+##else:
+##pass
+
+
+##data = allfinals.find()
+##final_dict = []
+##for item in data:
+##item.pop('_id')
+##final_dict.append(item)
+##return jsonify(final_dict)
+
+@app.route('/getstats/<countries>', methods=['GET'])
+def getstats(countries):
     rows = []
     result = []
-    with open('DataPublicationAPI/WorldCupMatches.csv') as f:
+    first_country = countries.split('&')[0]
+    second_country = countries.split('&')[1]
+    with open('WorldCupMatches.csv') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row['Stage'] == 'Final':
+            if (row['Home Team Name'] == first_country and row['Away Team Name'] == second_country) \
+                    or (row['Home Team Name'] == second_country and row['Away Team Name'] == first_country):
                 rows.extend([{'Year': row['Year'], 'Stage': row['Stage'], 'Home Team': row['Home Team Name'],
-                                  'Home Team Goals': row['Home Team Goals'], 'Away Team Goals': row['Away Team Goals'],
-                                  'Away Team': row['Away Team Name'], }])
-    ##with open('static/matches.json', 'w') as f:
-        ##f.write(json.dumps(rows, sort_keys=False, indent=4, separators=(',', ': ')))
+                              'Home Team Goals': row['Home Team Goals'], 'Away Team Goals': row['Away Team Goals'],
+                              'Away Team': row['Away Team Name'], }])
+    victory_1 = 0
+    victory_2 = 0
+    for row in rows:
+        if row['Home Team'] == first_country and int(row['Home Team Goals']) > int(row['Away Team Goals']):
+            victory_1 += 1
+        elif row['Away Team'] == first_country and int(row['Away Team Goals']) > int(row['Home Team Goals']):
+            victory_1 += 1
+        elif row['Away Team'] == second_country and int(row['Away Team Goals']) > int(row['Home Team Goals']):
+            victory_2 += 1
+        elif row['Home Team'] == second_country and int(row['Home Team Goals']) > int(row['Away Team Goals']):
+            victory_2 += 1
+    print(victory_2)
+    winning_1 = victory_1 / len(rows)
+    winning_2 = victory_2 / len(rows)
+
+    winning_rate = {
+        'winnings': {first_country + ' winning rate': round(winning_1, 2), second_country + ' winning rate': round(winning_2, 2)}}
+    print(winning_rate)
+    rows.extend([winning_rate])
+
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
-    allfinals = db['allfinals']
-    if allfinals.find().count() == 0:
+    versus = db[countries]
+    if versus.find().count() == 0:
         for item in rows:
-            allfinals.insert_one(item)
+            versus.insert_one(item)
     else:
-        pass
-    data = allfinals.find()
+        for item in rows[:-1]:
+            versus.update_one(filter={'Year': item['Year']}, update={'$set': item})
+        versus.update_one(filter={'winnings': 'winnings'}, update={'$set': rows[-1]})
+    data = versus.find()
     final_dict = []
     for item in data:
         item.pop('_id')
         final_dict.append(item)
-    return jsonify(final_dict),{'Access-Control-Allow-Origin': '*'}
-    ##with open('static/matches.json', 'r') as f:
-        ##load_dict = json.load(f)
-        ##for item in load_dict:
-            ##if item['Stage'] == 'Final':
-                ##result.append(item)
-        ##return jsonify(result)
+    return jsonify(final_dict)
 
 
 @app.route('/querybycountry/<country>', methods=['GET'])
@@ -112,27 +159,21 @@ def querybycountry(country):
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
     countrys = db['countrys']
-    if countrys.find({'Country':country}).count() > 0:
-        pass
+    if countrys.find({'Country': country}).count() > 0:
+        countrys.update_one(filter={'Country': new_dict['Country']}, update={'$set': new_dict})
     else:
         countrys.insert_one(new_dict)
-    data = countrys.find({'Country':country})
+    data = countrys.find({'Country': country})
     country_dict = []
     for item in data:
         item.pop('_id')
         country_dict.append(item)
-    return jsonify(country_dict),{'Access-Control-Allow-Origin': '*'}
-    ##filename = 'static/' + country + '.json'
-    ##with open(filename, 'w') as f:
-        ##f.write(json.dumps(new_dict, sort_keys=False, indent=4, separators=(',', ': ')))
-    ##with open(filename, 'r') as f:
-        ##load_dict = json.load(f)
-        ##return jsonify(load_dict)
+    return jsonify(country_dict)
 
 
 ##def download_data():
-    ##kaggle_info = {'UserName':'datarover', 'Password':'datarover'}
-    ##data_urls = []
+##kaggle_info = {'UserName':'datarover', 'Password':'datarover'}
+##data_urls = []
 
 
 if __name__ == '__main__':
