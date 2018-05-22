@@ -132,10 +132,12 @@ def querybycountry(country):
         region = 'Germany'
     elif country == 'Korea Republic':
         region = 'Republic%20of%20Korea'
-    elif country == 'Soviet Union' or 'Russia':
-        region = 'Russian%20Federation'
     elif country == 'England':
         region = 'United%20Kingdom'
+    elif country == 'Soviet Union':
+        region = 'Russian%20Federation'
+    elif country == 'Russia':
+        region = 'Russian%20Federation'
     else:
         region = country
     url = 'http://data.un.org/CountryProfile.aspx/en/index.html/CountryProfile.aspx?crName=' + region
@@ -156,6 +158,22 @@ def querybycountry(country):
             else:
                 new_dict[item[0]] = item[2]
     new_dict['Country'] = country
+    realname = ''
+    if len(region.split('%20')) > 1:
+        for item in region.split('%20'):
+            realname = realname + ' ' + item
+        realname = realname.lstrip()
+    else:
+        realname = region
+    print(realname)
+    with open('CountryCode.csv') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['CountryName'] == realname:
+                print(region)
+                print(row['CountryCode'])
+                new_dict['CountryCode'] = row['CountryCode']
+
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
     countrys = db['countrys']
