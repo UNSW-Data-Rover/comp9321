@@ -44,10 +44,10 @@ def getaddress(address):
 def getstadium():
     filename='WorldCupMatches.csv'
     dic=[]
-    with open(filename,'r',encoding = "utf-8") as f:
+    with open(filename,'r') as f:
         reader = csv.DictReader(f)
         L0 = [row['Year'] for row in reader]
-    with open(filename, 'r', encoding="utf-8") as f1:
+    with open(filename, 'r') as f1:
         reader1 = csv.DictReader(f1)
         L1 = [row['Stadium'] for row in reader1]
     for i in range(len(L0)):
