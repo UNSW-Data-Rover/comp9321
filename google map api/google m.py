@@ -31,7 +31,7 @@ def get(address):
     if responseJson.get('status') == "OK":
         lat = responseJson.get('results')[0]['geometry']['location']['lat']
         lng = responseJson.get('results')[0]['geometry']['location']['lng']
-        return str(lat)+str(lng)
+        return str(lat)+','+str(lng)
 
 def getaddress(address):
     addressUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=AIzaSyDlJxbn3xmDZxX3Seek-wwSalU6hXQKsqQ'
