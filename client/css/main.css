@@ -41,6 +41,7 @@
     background-repeat: repeat-x;
     background-position: center 0;
     max-width: 100%;
+    min-height: 1000px;
     margin-left: 0px;
 }
 
