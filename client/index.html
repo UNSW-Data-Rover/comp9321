@@ -80,7 +80,7 @@
                 <tbody>
                 <tr v-for="r in rows">
                     <td>{{ r.Year }}</td>
-                    <td>{{ r.Country }}</td>
+                    <td><button class="btn btn-outline-success my-2 my-sm-0" :v-model="country" @click="test" >{{ r.Country }}</button></td>
                     <td>{{ r.Champion }}</td>
                     <!--This column ('Runners-Up') is not working, because the key has a '-'-->
                     <td>{{ r.Runners-Up }}</td>

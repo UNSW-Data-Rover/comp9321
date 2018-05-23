@@ -51,7 +51,8 @@ var v = new Vue({
         message: 'hi',
         country: 'Russia',
         c : {},
-        code: 'RU'
+        code: 'RU',
+        table_country: ''
     },
     computed: {
         img_code: function(){
@@ -92,7 +93,24 @@ var v = new Vue({
                 }
             });
            
+        },
+        test : function(){
+            var self = this;
+            console.log(this.table_country);
+            $.ajax({
+                url: url + 'querybycountry/'+this.table_country,
+                method: 'GET',
+                success: function (data) {
+                    self.c=data[0];
+                    self.code=data[0]['CountryCode'];
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         }
+
     }
 });
 
