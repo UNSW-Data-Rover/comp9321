@@ -104,6 +104,30 @@ def getstats(countries):
     print(winning_rate)
     rows.extend([winning_rate])
 
+    CountryCode = {}
+    if first_country == 'Korea Republic':
+        first_country = 'Republic of Korea'
+    if first_country == 'Soviet Union':
+        region = 'Russian Federation'
+    if first_country == 'Russia':
+        region = 'Russian Federation'
+    if second_country == 'Korea Republic':
+        first_country = 'Republic of Korea'
+    if second_country == 'Soviet Union':
+        region = 'Russian Federation'
+    if second_country == 'Russia':
+        region = 'Russian Federation'
+    with open('CountryCode.csv') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['CountryName'] == first_country:
+                print(row['CountryCode'])
+                CountryCode['FirstCode'] = row['CountryCode']
+            if row['CountryName'] == second_country:
+                print(row['CountryCode'])
+                CountryCode['SecondCode'] = row['CountryCode']
+    rows.extend([CountryCode])
+
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
     versus = db[countries]
@@ -111,9 +135,10 @@ def getstats(countries):
         for item in rows:
             versus.insert_one(item)
     else:
-        for item in rows[:-1]:
+        for item in rows[:-2]:
             versus.update_one(filter={'Year': item['Year']}, update={'$set': item})
-        versus.update_one(filter={'winnings': 'winnings'}, update={'$set': rows[-1]})
+        versus.update_one(filter={'winnings': 'winnings'}, update={'$set': rows[-2]})
+        versus.update_one(filter={'Countrycode': 'Countrycode'}, update={'$set': rows[-1]})
     data = versus.find()
     final_dict = []
     for item in data:
