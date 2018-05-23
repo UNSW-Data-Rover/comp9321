@@ -6,6 +6,9 @@ import urllib
 from urllib.request import urlopen
 import csv
 from flask import jsonify
+import sys,io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 from flask_restful import reqparse
 from datetime import datetime
 
@@ -51,6 +54,7 @@ def getstadium():
     for i in range(len(L0)):
         dic.append([L0[i],L1[i]])
     return dic
+
 
 l=getstadium()
 for i in l:
@@ -117,13 +121,13 @@ for h in range(len(p2)):
 
 # getstadium()
 # get('austrilia')
-@app.route("/country", methods=['GET'])
-def get_result():
-    parser = reqparse.RequestParser()
-    parser.add_argument('country name', type=str)
-    args = parser.parse_args()
-
-    name = args.get("country name")
+@app.route("/country/<name>", methods=['GET'])
+def get_result(name):
+    # parser = reqparse.RequestParser()
+    # parser.add_argument('countryname', type=str)
+    # args = parser.parse_args()
+    #
+    # name = args.get("countryname")
     m=[]
     for i in n:
         if i[0]==name:
@@ -137,7 +141,7 @@ def get_result():
 
 
     return jsonify(m)
-#
+
 #
 if __name__ == "__main__":
     app.run()
