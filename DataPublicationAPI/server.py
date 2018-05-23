@@ -126,7 +126,8 @@ def getstats(countries):
             if row['CountryName'] == second_country:
                 print(row['CountryCode'])
                 CountryCode['SecondCode'] = row['CountryCode']
-    rows.extend([CountryCode])
+    temp = {'CountryCode':CountryCode}
+    rows.extend([temp])
 
     client = MongoClient('mongodb://datarover:datarover@ds113775.mlab.com:13775/9321')
     db = client.get_database()
@@ -138,7 +139,7 @@ def getstats(countries):
         for item in rows[:-2]:
             versus.update_one(filter={'Year': item['Year']}, update={'$set': item})
         versus.update_one(filter={'winnings': 'winnings'}, update={'$set': rows[-2]})
-        versus.update_one(filter={'Countrycode': 'Countrycode'}, update={'$set': rows[-1]})
+        versus.update_one(filter={'CountryCode': 'CountryCode'}, update={'$set': rows[-1]})
     data = versus.find()
     final_dict = []
     for item in data:
