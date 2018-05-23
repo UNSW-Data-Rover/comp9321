@@ -1,47 +1,11 @@
-var url = "http://127.0.0.1:5000/";
 
-var myCenter=new google.maps.LatLng(55.7558, 37.6173);
-
-function initialize() {
-    var mapProp = {
-      center:myCenter,
-      zoom:10,
-      mapTypeId:google.maps.MapTypeId.ROADMAP
-      };
-
-    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
-    var points = [ new google.maps.LatLng(55.810979, 37.523728),
-                    new google.maps.LatLng(55.715979, 37.543728)];
-    var infowindow = new google.maps.InfoWindow();
-    markers = [];
-    for(var i = 0;i<points.length; i++){
-        var gmarker = new google.maps.Marker({
-            position : points[i],
-            // title:'dasfasdg',
-            map : map
-        });
-        markers.push(gmarker);
-        google.maps.event.addListener(gmarker, 'click', function() {
-              infowindow.setContent('<div><strong>' + "Stadium name" + '</strong><br>' +
-                'Address: ' + "20 Street..." + '<br></div>');
-              infowindow.open(map, this);
-        });
-    }
-    setVeiwPort();
-}
-
-var setVeiwPort = function () {
-    var bounds = new google.maps.LatLngBounds();
-    for(var i = 0;i < markers.length;i++){
-        bounds.extend(markers[i].getPosition());
-    }
-    map.fitBounds(bounds);
-};
-
-google.maps.event.addDomListener(window, 'load', initialize);
+// url constant
+const data_publish_url = "http://127.0.0.1:5000/";
+const google_url= "http://127.0.0.1:8080/";
 
 
+
+// child component of row array/ table element
 Vue.component('time-eater', {
       template: `
         <button class="btn btn-outline-success my-2 my-sm-0"  v-on:click="unhappy">
@@ -54,7 +18,7 @@ Vue.component('time-eater', {
       }
 });
 
-
+// Vuejs framework
 var v = new Vue({
     el: '#index',
     component: {
@@ -66,36 +30,43 @@ var v = new Vue({
         country: 'Russia',
         c : {},
         code: 'RU',
-        table_country: ''
+        map_center: [55.7558, 37.6173],
+        stadium_coordinates: [ new google.maps.LatLng(55.810979, 37.523728),
+                            new google.maps.LatLng(55.715979, 37.543728)],
+        stadium_names: ['stadium 1', 'stadium2'],
+        stadium_address: ['street 1', 'street2']
+
     },
     computed: {
         img_code: function(){
             var imgcode= "../client/svg/"+this.code+".svg";
-            console.log(imgcode);
             return imgcode;
         }
     },
     mounted: function () {
         var self = this;
+        
         $.ajax({
-            url: url + 'getallevents/',
+            url: data_publish_url + 'getallevents/',
             method: 'GET',
             success: function (data) {
                 self.rows = data;
-                console.log(self.rows);
             },
             error: function (error) {
                 console.log(error);
             }
         });
         this.info();
+        google.maps.event.addDomListener(window, 'load', this.google());
+
     },
   
     methods: {
         info : function(){
+
             var self = this;
             $.ajax({
-                url: url + 'querybycountry/'+this.country,
+                url: data_publish_url + 'querybycountry/'+this.country,
                 method: 'GET',
                 success: function (data) {
                     self.c=data[0];
@@ -106,22 +77,98 @@ var v = new Vue({
                     console.log(error);
                 }
             });
-           
+
         },
-        test: function(){
+
+        mapping: function(){
+
+            this.info();
+
             var self= this;
-            console.log(this.country);
+            $.ajax({
+                url: google_url + 'country/'+this.country,
+                method: 'GET',
+                async: false,
+                success: function (data) {
+                    var country_coordinate=data[data.length-1]['Country Coordinate'].split(',');
+                    self.map_center=[parseFloat(country_coordinate[0]), parseFloat(country_coordinate[1])];
+                    
+                    self.stadium_coordinates=[];
+
+                    self.stadium_names=[];
+                    self.stadium_address=[];
+                    
+                    for(var i = 0;i<data.length-1; i++){
+                        if (data[i]["Coordinate"] == null){
+                            continue;
+                        };
+                            var latlong=data[i]["Coordinate"].split(',');
+                            var gloc = new google.maps.LatLng(parseFloat(latlong[0]), parseFloat(latlong[1]));
+                            self.stadium_coordinates.push(gloc);
+                            self.stadium_names.push(data[i]["Stadium"]);
+                            self.stadium_address.push(data[i]["Address"]);
+                       
+                    };
+
+                 
+                },
+                error : function (error) {
+                    console.log(error);
+                }
+           
+            });
+            this.google();
         },
         table: function(new_c){
             this.country=new_c[0];
             this.year = new_c[1];
-            console.log(this.year);
-            this.info();
+            this.mapping();
+        },
+
+        google: function () {
+            console.log('googling');
+            var myCenter=new google.maps.LatLng(this.map_center[0], this.map_center[1]);
+            var mapProp = {
+              center:myCenter,
+              zoom:10,
+              mapTypeId:google.maps.MapTypeId.ROADMAP
+              };
+
+            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+            var infowindow = new google.maps.InfoWindow();
+            console.log(this.stadium_coordinates);
+            var markers = [];
+          
+            for(var i = 0;i< this.stadium_coordinates.length; i++){
+                var gmarker = new google.maps.Marker({
+                                            position : this.stadium_coordinates[i],
+                                            map : map});
+                markers.push(gmarker);
+                
+                var content= '<div><strong>' + this.stadium_names[i] + '</strong><br>' +
+                            'Address: ' + this.stadium_address[i] + '<br></div>';
+
+                var infowindow = new google.maps.InfoWindow();
+
+                google.maps.event.addListener(gmarker,'click', (function(gmarker,content,infowindow){ 
+                        return function() {
+                            infowindow.setContent(content);
+                            infowindow.open(map,gmarker);
+                        };
+                    })(gmarker,content,infowindow)); 
+
+
+            };
+            
+            var bounds = new google.maps.LatLngBounds();
+            for(var i = 0;i < markers.length;i++){
+                bounds.extend(markers[i].getPosition());
+            }
+            map.fitBounds(bounds);
         }
+
 
 
     }
 });
 
-
-console.log(v.message)
