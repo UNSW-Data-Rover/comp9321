@@ -1,7 +1,7 @@
 .section-header{
     height: 180px;
     margin-top: -3px;
-    background-image: url(//img.fifa.com/images/fwc/2018/fwc_darkbluebg.png);
+    background-image: url(http://img.fifa.com/images/fwc/2018/fwc_darkbluebg.png);
 }
 
 .section-header-wrap {
@@ -36,7 +36,7 @@
     color: #cccccc;
 }
 .section-container{
-    background-image: url(//img.fifa.com/images/fwc/2018/bg.jpg);
+    background-image: url(http://img.fifa.com/images/fwc/2018/bg.jpg);
     background-color: #fff;
     background-repeat: repeat-x;
     background-position: center 0;
