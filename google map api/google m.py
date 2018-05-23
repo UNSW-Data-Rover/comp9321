@@ -8,7 +8,6 @@ import csv
 from flask import jsonify
 import sys,io
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 from flask_restful import reqparse
 from datetime import datetime
 
@@ -115,7 +114,8 @@ for key,value in dic1.items():
     p3.append(value)
 for h in range(len(p2)):
     n.append([p3[h], p2[h]])
-# print(n)
+
+
 
 
 
