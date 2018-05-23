@@ -42,10 +42,25 @@ var setVeiwPort = function () {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
+Vue.component('time-eater', {
+      template: `
+        <button class="btn btn-outline-success my-2 my-sm-0"  v-on:click="unhappy">
+          {{title}} </button>`,
+      props: ['title'],
+      methods: {
+        unhappy() {
+            console.log(this.title);
+            this.$emit('unhappy', this.title);
+        }
+      }
+});
 
 
 var v = new Vue({
     el: '#index',
+    component: {
+        'time-eater': 'time-eater'
+    },
     data: {
         rows: '',
         message: 'hi',
@@ -94,24 +109,20 @@ var v = new Vue({
             });
            
         },
-        test : function(){
-            var self = this;
-            console.log(this.table_country);
-            $.ajax({
-                url: url + 'querybycountry/'+this.table_country,
-                method: 'GET',
-                success: function (data) {
-                    self.c=data[0];
-                    self.code=data[0]['CountryCode'];
-
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        test: function(){
+            var self= this;
+            console.log(this.country);
+        },
+        table: function(new_c){
+            this.country=new_c;
+            console.log(new_c);
+            console.log(this.country);
+            this.info();
         }
+
 
     }
 });
 
 
+console.log(v.message)
