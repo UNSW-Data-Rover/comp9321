@@ -46,11 +46,10 @@ Vue.component('time-eater', {
       template: `
         <button class="btn btn-outline-success my-2 my-sm-0"  v-on:click="unhappy">
           {{title}} </button>`,
-      props: ['title'],
+      props: ['title','year'],
       methods: {
         unhappy() {
-            console.log(this.title);
-            this.$emit('unhappy', this.title);
+            this.$emit('unhappy', [this.title, this.year]);
         }
       }
 });
@@ -63,7 +62,7 @@ var v = new Vue({
     },
     data: {
         rows: '',
-        message: 'hi',
+        year: '2018',
         country: 'Russia',
         c : {},
         code: 'RU',
@@ -114,9 +113,9 @@ var v = new Vue({
             console.log(this.country);
         },
         table: function(new_c){
-            this.country=new_c;
-            console.log(new_c);
-            console.log(this.country);
+            this.country=new_c[0];
+            this.year = new_c[1];
+            console.log(this.year);
             this.info();
         }
 
