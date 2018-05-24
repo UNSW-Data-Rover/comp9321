@@ -15,7 +15,7 @@ def getallevents():
         reader = csv.DictReader(f)
         for row in reader:
             rows.extend([{'Year': row['Year'], 'Country': row['Country'], 'Champion': row['Winner'],
-                          'Runners-Up': row['Runners-Up'], 'Third': row['Third'], 'Fourth': row['Fourth'],
+                          'RunnersUp': row['Runners-Up'], 'Third': row['Third'], 'Fourth': row['Fourth'],
                           'TotalGoals': row['GoalsScored'], 'QualifiedTeams': row['QualifiedTeams'],
                           'MatchesPlayed': row['MatchesPlayed'], 'Attendance': row['Attendance']}])
     ##with open('static/events.json', 'w') as f:
