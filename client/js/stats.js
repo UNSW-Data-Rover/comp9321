@@ -34,8 +34,8 @@ var s = new Vue({
                     self.statistics=data.slice(0, data.length-1);
                     var winning1= self.compare_country1 + ' winning rate';
                     var winning2= self.compare_country2 + ' winning rate';
-                    self.ratio1= data[data.length-2].winnings[winning1];
-                    self.ratio2= data[data.length-2].winnings[winning2];
+                    self.ratio1= (data[data.length-2].winnings[winning1])*100 + '%';
+                    self.ratio2= (data[data.length-2].winnings[winning2])*100 + '%';
                     self.code1= data[data.length-1].CountryCode.FirstCode;
                     self.code2= data[data.length-1].CountryCode.SecondCode;
                     
