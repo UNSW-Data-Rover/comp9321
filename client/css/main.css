@@ -79,6 +79,16 @@
     padding: 50px;
 }
 
+.section-chart{
+    height: 500px;
+    width: 800px ;
+    margin:0 auto ;
+
+}
+.canvas{
+    width:500px;
+    height: 400px;
+}
 .country-name{
     color: #0e4583;
 }
