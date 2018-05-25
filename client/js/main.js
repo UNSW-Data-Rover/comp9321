@@ -106,16 +106,17 @@ var v = new Vue({
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             hoverBackgroundColor : 'rgba(54, 162, 235, 0.5)',
                             borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
+                            borderWidth: 1,
+                            fill: 'red'
                         }],
 
                     },
                     options: {
                         scales: {
                             yAxes: [{
-                                // gridLines: {
-                                //     display : false    //不显示表格线
-                                // },
+                                gridLines: {
+                                    display : false    //不显示表格线
+                                },
                                 ticks: {
                                     beginAtZero:true
                                 }
@@ -127,7 +128,6 @@ var v = new Vue({
                             console.log(self.country);
 
                             //call funtion show country info and map
-                            self.info();
                             self.mapping();
                         }
                     }
