@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, operator
-import json, csv, os, requests
+from flask import Flask, request, jsonify
+import json, csv, os, requests, operator
 from bs4 import BeautifulSoup
 import urllib.request
 from pymongo import MongoClient
