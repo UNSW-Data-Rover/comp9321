@@ -254,10 +254,11 @@ def gettop():
         sorted_count = sorted(count.items(), key=operator.itemgetter(1))
         print(len(sorted_count))
         print(sorted_count)
-        temp = {}
+        temp = []
         for i in range(10):
-            temp[sorted_count[len(sorted_count)-i-1][0]] = sorted_count[len(sorted_count)-i-1][1]
-        top.insert_one(temp)
+            temp.extend([{'Country': sorted_count[len(sorted_count)-i-1][0], 'Count': sorted_count[len(sorted_count)-i-1][1]}])
+        for item in temp:
+            top.insert_one(item)
     data = top.find()
     final_dict = []
     for item in data:
