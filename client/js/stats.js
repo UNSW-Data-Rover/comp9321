@@ -1,4 +1,4 @@
-Vue.component('table-selector1', {
+Vue.component('table-selector', {
       template: `
         
             <button class="btn btn-link my-2 my-sm-0" style="font-weight: bold; color: darkblue" @click="unhappy($event)" >
@@ -13,20 +13,6 @@ Vue.component('table-selector1', {
       }
 });
 
-Vue.component('table-selector2', {
-      template: `
-        
-            <button class="btn btn-link my-2 my-sm-0" style="font-weight: bold; color: darkblue" @click="unhappy($event)" >
-         {{ country }} </button>
-
-        `,
-      props: ['country'],
-      methods: {
-        unhappy() {
-            this.$emit('unhappy', this.country);
-        }
-      }
-});
 
 var s = new Vue({
     el: '#stat',

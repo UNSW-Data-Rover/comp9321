@@ -94,7 +94,7 @@
        <table id="table2" class="table table-hover">
            <tr v-for="r in ctable">
             <td>
-                  <table-selector1 :country='r' @unhappy="change1($event)"></table-selector1>
+                  <table-selector :country='r' @unhappy="change1($event)"></table-selector>
             </td>
           </tr>
         </table>
@@ -160,7 +160,7 @@
        <table id="table2" class="table table-hover">
            <tr v-for="r in ctable">
             <td>
-                  <table-selector2 :country='r' @unhappy="change2($event)"></table-selector2>
+                  <table-selector :country='r' @unhappy="change2($event)"></table-selector>
             </td>
           </tr>
         </table>
