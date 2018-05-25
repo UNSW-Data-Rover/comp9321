@@ -192,6 +192,8 @@ def querybycountry(country):
             realname = realname.lstrip()
         else:
             realname = region
+        if realname == 'United States of America':
+            realname = 'United States'        
         print(realname)
         with open('CountryCode.csv') as f:
             reader = csv.DictReader(f)
