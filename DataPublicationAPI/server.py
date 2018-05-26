@@ -149,6 +149,7 @@ def querybycountry(country):
     countrys = db['countrys']
     if countrys.find({'Country': country}).count() > 0:
         pass
+    else:
         if country == 'Korea&Japan':
             new_dict = {'Region':'Eastern Asia', 'Surface area (sq km)':'100266/377930', 'Population (proj, 000)':'50504/126324',
                         'Pop density (per sq km)':'519.4/346.5', 'Capital city':'Seoul/Tokyo',
