@@ -149,60 +149,66 @@ def querybycountry(country):
     countrys = db['countrys']
     if countrys.find({'Country': country}).count() > 0:
         pass
-    else:
-        region = None
-        if country == 'USA':
-            region = 'United%20States%20of%20America'
-        elif country == 'Czechoslovakia':
-            region = 'Czech%20Republic'
-        elif country == 'Germany FR':
-            region = 'Germany'
-        elif country == 'Korea Republic':
-            region = 'Republic%20of%20Korea'
-        elif country == 'England':
-            region = 'United%20Kingdom'
-        elif country == 'Soviet Union':
-            region = 'Russian%20Federation'
-        elif country == 'Russia':
-            region = 'Russian%20Federation'
+        if country == 'Korea&Japan':
+            new_dict = {'Region':'Eastern Asia', 'Surface area (sq km)':'100266/377930', 'Population (proj, 000)':'50504/126324',
+                        'Pop density (per sq km)':'519.4/346.5', 'Capital city':'Seoul/Tokyo',
+                        'Currency':'South Korea Won(KRW)/Yen(JPY)', 'UN membership date':'17 September 1991/18 December 1956',
+                        'Country':'Korea&Japan', 'CountryCode': 'KR/JP'}
+            countrys.insert_one(new_dict)
         else:
-            region = country
-        url = 'http://data.un.org/CountryProfile.aspx/en/index.html/CountryProfile.aspx?crName=' + region
-        with urllib.request.urlopen(url) as response:
-            html_data = response.read()
-        table_data = [[cell.text for cell in row('td')]
-                      for row in BeautifulSoup(html_data, 'html.parser')('tr')]
-        ##print(table_data)
-        wanted = ['Region', 'Surface area (sq km)', 'Population (proj., 000)', 'Pop. density (per sq km)',
-                  'Capital city', 'Currency', 'UN membership date']
-        new_dict = {}
-        for item in table_data:
-            if len(item) > 2 and item[0] in wanted:
-                if item[0] == 'Population (proj., 000)':
-                    new_dict['Population (proj, 000)'] = item[2]
-                elif item[0] == 'Pop. density (per sq km)':
-                    new_dict['Pop density (per sq km)'] = item[2]
-                else:
-                    new_dict[item[0]] = item[2]
-        new_dict['Country'] = country
-        realname = ''
-        if len(region.split('%20')) > 1:
-            for item in region.split('%20'):
-                realname = realname + ' ' + item
-            realname = realname.lstrip()
-        else:
-            realname = region
-        if realname == 'United States of America':
-            realname = 'United States'        
-        print(realname)
-        with open('CountryCode.csv') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row['CountryName'] == realname:
-                    print(region)
-                    print(row['CountryCode'])
-                    new_dict['CountryCode'] = row['CountryCode']
-        countrys.insert_one(new_dict)
+            region = None
+            if country == 'USA':
+                region = 'United%20States%20of%20America'
+            elif country == 'Czechoslovakia':
+                region = 'Czech%20Republic'
+            elif country == 'Germany FR':
+                region = 'Germany'
+            elif country == 'Korea Republic':
+                region = 'Republic%20of%20Korea'
+            elif country == 'England':
+                region = 'United%20Kingdom'
+            elif country == 'Soviet Union':
+                region = 'Russian%20Federation'
+            elif country == 'Russia':
+                region = 'Russian%20Federation'
+            else:
+                region = country
+            url = 'http://data.un.org/CountryProfile.aspx/en/index.html/CountryProfile.aspx?crName=' + region
+            with urllib.request.urlopen(url) as response:
+                html_data = response.read()
+            table_data = [[cell.text for cell in row('td')]
+                          for row in BeautifulSoup(html_data, 'html.parser')('tr')]
+            ##print(table_data)
+            wanted = ['Region', 'Surface area (sq km)', 'Population (proj., 000)', 'Pop. density (per sq km)',
+                      'Capital city', 'Currency', 'UN membership date']
+            new_dict = {}
+            for item in table_data:
+                if len(item) > 2 and item[0] in wanted:
+                    if item[0] == 'Population (proj., 000)':
+                        new_dict['Population (proj, 000)'] = item[2]
+                    elif item[0] == 'Pop. density (per sq km)':
+                        new_dict['Pop density (per sq km)'] = item[2]
+                    else:
+                        new_dict[item[0]] = item[2]
+            new_dict['Country'] = country
+            realname = ''
+            if len(region.split('%20')) > 1:
+                for item in region.split('%20'):
+                    realname = realname + ' ' + item
+                realname = realname.lstrip()
+            else:
+                realname = region
+            if realname == 'United States of America':
+                realname = 'United States'
+            print(realname)
+            with open('CountryCode.csv') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row['CountryName'] == realname:
+                        print(region)
+                        print(row['CountryCode'])
+                        new_dict['CountryCode'] = row['CountryCode']
+            countrys.insert_one(new_dict)
     ##if countrys.find({'Country': country}).count() > 0:
         ##countrys.update_one(filter={'Country': new_dict['Country']}, update={'$set': new_dict})
     ##else:
