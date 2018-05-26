@@ -10,6 +10,7 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDlJxbn3xmDZxX3Seek-wwSalU6hXQKsqQ&sensor=false"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
 
 </head>
@@ -54,7 +55,7 @@
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search a country" aria-label="Search" v-model="country">
-      <button class="btn btn-outline-success my-2 my-sm-0"  @click.prevent="info">Search</button>
+      <button class="btn btn-outline-success my-2 my-sm-0"  @click.prevent="mapping">Search</button>
     </form>
   </div>
 </nav>
@@ -88,8 +89,7 @@
 
                     </td>
                     <td>{{ r.Champion }}</td>
-                    <!--This column ('Runners-Up') is not working, because the key has a '-'-->
-                    <td>{{ r.Runners-Up }}</td>
+                    <td>{{ r.RunnersUp }}</td>
                     <td>{{ r.Third }}</td>
                     <td>{{ r.Fourth }}</td>
                     <td>{{ r.TotalGoals }}</td>
@@ -97,6 +97,10 @@
                 </tr>
                 </tbody>
             </table>
+
+            <div class="section-chart">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
 
 
@@ -146,7 +150,6 @@
             <div id="googleMap" style="width:460px;height:400px;"></div>
         </div>
 
-        
 
 
 </div>

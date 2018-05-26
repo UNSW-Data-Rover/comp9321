@@ -7,9 +7,11 @@ from urllib.request import urlopen
 import csv
 from flask import jsonify
 import sys,io
-
+from flask_cors import CORS
 from flask_restful import reqparse
 from datetime import datetime
+
+
 
 class Country:
     def __init__(self, name):
@@ -19,6 +21,7 @@ class Country:
 response1=requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDlJxbn3xmDZxX3Seek-wwSalU6hXQKsqQ')
 gmaps = googlemaps.Client(key='AIzaSyDlJxbn3xmDZxX3Seek-wwSalU6hXQKsqQ')
 app = Flask(__name__)
+CORS(app)
 # Geocoding an address
 geocode_result = gmaps.geocode('1600 Amphitheatre Parkway, Mountain View, CA')
 
@@ -144,4 +147,4 @@ def get_result(name):
 
 #
 if __name__ == "__main__":
-    app.run()
+    app.run(port=8080)

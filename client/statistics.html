@@ -54,7 +54,6 @@
   </div>
 </nav>
 
-<br>
 
 
 
@@ -85,61 +84,96 @@
 </nav>
 
 
-<div class="section-container">
-    <div class="section-contrast">
-        <div class="row">
-            <div class = "col-3">
-                <img class="country-flag" :src="img_code1">
+
+
+<div class="container-fluid">
+    <div class="row">
+
+
+              <div class="col">
+       <table id="table2" class="table table-hover">
+           <tr v-for="r in ctable">
+            <td>
+                  <table-selector :country='r' @unhappy="change1($event)"></table-selector>
+            </td>
+          </tr>
+        </table>
+      </div>
+    
+    
+
+     <div class="col-9">
+        <div class="section-container">
+            <div class="section-contrast row">
+                    <div class = "col-3">
+                        <img class="country-flag" :src="img_code1">
+                    </div>
+                    <div class = "col-2">
+                        <h1>{{ratio1}}</h1>
+                    </div>
+                    <div class = "col-2">
+                        <h1>VS</h1>
+                    </div>
+                    <div class = "col-2">
+                        <h1>{{ratio2}}</h1>
+                    </div>
+                    <div class = "col-3">
+                        <img class="country-flag" :src="img_code2">
+                    </div>
             </div>
-            <div class = "col-1">
-                <h1>{{ratio1}}</h1>
-            </div>
-            <div class = "col-4">
-            <!-- bar chart-->
-            </div>
-            <div class = "col-2">
-                <h1>{{ratio2}}</h1>
-            </div>
-            <div class = "col-2">
-                <img class="country-flag" :src="img_code2">
+
+
+            <div class="section-table1">
+                <table id="table2" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Year</th>
+                            <th scope="col">Stage</th>
+                            <th scope="col">Home Team</th>
+                            <th scope="col">Home Team Goals</th>
+                            <th scope="col">Away Team</th>
+                            <th scope="col">Away Team Goals</th>
+                           
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr v-for="r in statistics">
+                            <td>{{ r["Year"] }}</td>
+                            <td>{{ r["Stage"] }}</td>
+                            <td>{{ r["Home Team"] }}</td>
+                            <td>{{ r["Home Team Goals"] }}</td>
+                            <td>{{ r["Away Team"]}}</td>
+                            <td>{{ r["Away Team Goals"] }}</td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
             </div>
         </div>
-    </div>
+      </div>
 
+        
 
-    <div class="section-table1">
-        <table id="table2" class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Year</th>
-                    <th scope="col">Stage</th>
-                    <th scope="col">Home Team</th>
-                    <th scope="col">Home Team Goals</th>
-                    <th scope="col">Away Team</th>
-                    <th scope="col">Away Team Goals</th>
-                   
-                </tr>
-                </thead>
-                <tbody>
-                
-                <tr v-for="r in statistics">
-                    <td>{{ r["Year"] }}</td>
-                    <td>{{ r["Stage"] }}</td>
-                    <td>{{ r["Home Team"] }}</td>
-                    <td>{{ r["Home Team Goals"] }}</td>
-                    <td>{{ r["Away Team"]}}</td>
-                    <td>{{ r["Away Team Goals"] }}</td>
+        <div class="col">
+       <table id="table2" class="table table-hover">
+           <tr v-for="r in ctable">
+            <td>
+                  <table-selector :country='r' @unhappy="change2($event)"></table-selector>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-                </tr>
+      
 
-                </tbody>
-            </table>
-    </div>
-</div>
-
+  </div>
 
 
 </div>
+</div>
+
 
 
 </body>
