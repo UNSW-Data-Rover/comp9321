@@ -10,7 +10,7 @@ import sys,io
 from flask_cors import CORS
 from flask_restful import reqparse
 from datetime import datetime
-
+from pymongo import MongoClient
 
 
 local_file={}
@@ -122,8 +122,6 @@ for h in range(len(p2)):
 
 
 
-
-
 # getstadium()
 # get('austrilia')
 @app.route("/country/<name>", methods=['GET'])
@@ -133,11 +131,25 @@ def get_result(name):
     # args = parser.parse_args()
     #
     # name = args.get("countryname")
+   
     m=[]
     name1=name.replace(' ','')
 
-    if name1 in local_file:
-        return jsonify(local_file[name1])
+    client = MongoClient('mongodb://DBLiang:1234@ds249249.mlab.com:49249/9321lab7')
+    db = client.get_database()
+    googledb = db['googleMap']
+
+    new_dict={}
+    if googledb.find({'Country': name1}).count() > 0:
+    	print('gotcha')
+    	data = googledb.find({'Country': name1})
+    	country_dict = []
+    	for item in data:
+    		item.pop('_id')
+    		country_dict.append(item)
+
+    	wanted= country_dict[0]['data']
+    	return jsonify(wanted)
 
     for i in n:
         if i[0]==name1:
@@ -147,7 +159,9 @@ def get_result(name):
             # d=dict([('Stadium',i[1]),('Address',getaddress(i[1])), ('Coordinate',get(i[1]))])
     m.append({'Country Coordinate':get(name1)})
     # print(m)
-    local_file[name1]= m
+    new_dict['Country']= name1
+    new_dict['data']=m
+    googledb.insert_one(new_dict)
 
 
     return jsonify(m)
