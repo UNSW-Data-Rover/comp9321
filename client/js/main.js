@@ -64,6 +64,10 @@ var v = new Vue({
     },
     computed: {
         img_code: function(){
+            if(this.code == 'KR/JP'){
+                var imgcode= "../client/svg/KR.svg";
+                return imgcode;
+            }
             var imgcode= "../client/svg/"+this.code+".svg";
             return imgcode;
         },
@@ -165,6 +169,11 @@ var v = new Vue({
                 success: function (data) {
                     self.c=data[0];
                     self.code=data[0]['CountryCode'];
+                    document.getElementById('jpflag').style.display="none";
+                    if(self.code == 'KR/JP'){
+                        document.getElementById('jpflag').style.display="block";
+                    }
+
 
                 },
                 error: function (error) {
