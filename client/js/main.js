@@ -1,8 +1,10 @@
+//written by Chieh-An Liang & JingXuan Li
+//javascript file for index page, using Vuejs framework
+//last revision date: May 26 2018
 
 // url constant
 const data_publish_url = "http://127.0.0.1:5000/";
 const google_url= "http://127.0.0.1:8080/";
-
 
 
 
@@ -71,7 +73,7 @@ var v = new Vue({
                 return this.country
             };
 
-            return this.country.replace(/\s/g, '');
+            return this.country
         }
     },
     mounted: function () {
@@ -148,7 +150,6 @@ var v = new Vue({
         });
 
         this.info();
-
         google.maps.event.addDomListener(window, 'load', this.google());
 
 
