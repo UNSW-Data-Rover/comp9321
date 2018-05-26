@@ -13,6 +13,8 @@ from datetime import datetime
 
 
 
+local_file={}
+
 class Country:
     def __init__(self, name):
         self.name = name
@@ -133,6 +135,10 @@ def get_result(name):
     # name = args.get("countryname")
     m=[]
     name1=name.replace(' ','')
+
+    if name1 in local_file:
+        return jsonify(local_file[name1])
+
     for i in n:
         if i[0]==name1:
             j=i[1].replace(' ','')
@@ -141,7 +147,7 @@ def get_result(name):
             # d=dict([('Stadium',i[1]),('Address',getaddress(i[1])), ('Coordinate',get(i[1]))])
     m.append({'Country Coordinate':get(name1)})
     # print(m)
-
+    local_file[name1]= m
 
 
     return jsonify(m)
