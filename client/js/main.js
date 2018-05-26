@@ -161,26 +161,38 @@ var v = new Vue({
 
     methods: {
         info : function(){
-
-            var self = this;
-            $.ajax({
-                url: data_publish_url + 'querybycountry/'+this.korea_check,
-                method: 'GET',
-                success: function (data) {
-                    self.c=data[0];
-                    self.code=data[0]['CountryCode'];
-                    document.getElementById('jpflag').style.display="none";
-                    if(self.code == 'KR/JP'){
-                        document.getElementById('jpflag').style.display="block";
-                    }
+        	const available=['Russia', 'Brazil','South Africa', 'Germany', 'Korea/Japan', 'France', 'USA', 'Italy',
+        					'Mexico', 'Spain', 'Argentina', 'England', 'Chile', 'Sweden', 'Switzerland', 'Uruguay']
+        	this.country= this.capitalize(this.country)
 
 
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        	var index= available.indexOf(this.country)
+        	if (index<0){
+        			alert("Sorry, country not in record!");
+        			return 0
+        	};
 
+        	var self = this;
+		        $.ajax({
+		            url: data_publish_url + 'querybycountry/'+this.korea_check,
+		            method: 'GET',
+		            success: function (data) {
+		                    self.c=data[0];
+		                    self.code=data[0]['CountryCode'];
+		                    document.getElementById('jpflag').style.display="none";
+		                    if(self.code == 'KR/JP'){
+		                        document.getElementById('jpflag').style.display="block";
+		                    }
+		            },
+		            error: function (error) {
+		                    console.log(error);
+		            }
+		    });
+  
+            
+        },
+        capitalize: function(string){
+            return string.charAt(0).toUpperCase() + string.slice(1);
         },
 
         mapping: function(){
@@ -193,6 +205,7 @@ var v = new Vue({
                 method: 'GET',
                 async: false,
                 success: function (data) {
+                    
                     var country_coordinate=data[data.length-1]['Country Coordinate'].split(',');
                     self.map_center=[parseFloat(country_coordinate[0]), parseFloat(country_coordinate[1])];
 
