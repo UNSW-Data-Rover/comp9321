@@ -132,13 +132,14 @@ def get_result(name):
     #
     # name = args.get("countryname")
     m=[]
+    name1=name.replace(' ','')
     for i in n:
-        if i[0]==name:
+        if i[0]==name1:
             j=i[1].replace(' ','')
             response = {"Stadium": j,"Address": getaddress(j),'Coordinate': get(j)}
             m.append(response)
             # d=dict([('Stadium',i[1]),('Address',getaddress(i[1])), ('Coordinate',get(i[1]))])
-    m.append({'Country Coordinate':get(name)})
+    m.append({'Country Coordinate':get(name1)})
     # print(m)
 
 
