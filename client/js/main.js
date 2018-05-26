@@ -1,8 +1,10 @@
+//written by Chieh-An Liang & JingXuan Li
+//javascript file for index page, using Vuejs framework
+//last revision date: May 26 2018
 
 // url constant
 const data_publish_url = "http://127.0.0.1:5000/";
 const google_url= "http://127.0.0.1:8080/";
-
 
 
 
@@ -64,6 +66,14 @@ var v = new Vue({
         img_code: function(){
             var imgcode= "../client/svg/"+this.code+".svg";
             return imgcode;
+        },
+        korea_check: function(){
+            if(this.country == "Korea/Japan"){
+                this.country = "Korea&Japan";
+                return this.country
+            };
+
+            return this.country
         }
     },
     mounted: function () {
@@ -140,7 +150,6 @@ var v = new Vue({
         });
 
         this.info();
-
         google.maps.event.addDomListener(window, 'load', this.google());
 
 
@@ -151,7 +160,7 @@ var v = new Vue({
 
             var self = this;
             $.ajax({
-                url: data_publish_url + 'querybycountry/'+this.country,
+                url: data_publish_url + 'querybycountry/'+this.korea_check,
                 method: 'GET',
                 success: function (data) {
                     self.c=data[0];

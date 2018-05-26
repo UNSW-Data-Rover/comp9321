@@ -31,11 +31,17 @@ var s = new Vue({
     },
     computed: {
         img_code1: function(){
+            if(this.compare_country1 == "England"){
+                this.code1="GB";
+            }
             var imgcode1= "../client/svg/"+this.code1+".svg";
             console.log(imgcode1);
             return imgcode1;
         },
         img_code2: function(){
+            if(this.compare_country1 == "England"){
+                this.code1="GB";
+            }
             var imgcode2= "../client/svg/"+this.code2+".svg";
             console.log(imgcode2);
             return imgcode2;
