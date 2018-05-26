@@ -90,7 +90,7 @@ for i in l:
     elif i[0]=='1998':
         i[0]='France'
     elif i[0]=='2002':
-        i[0]='Korea/Japan'
+        i[0]='Korea&Japan'
     elif i[0]=='2006':
         i[0]='Germany'
     elif i[0]=='2010':
