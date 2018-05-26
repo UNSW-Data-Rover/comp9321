@@ -64,6 +64,14 @@ var v = new Vue({
         img_code: function(){
             var imgcode= "../client/svg/"+this.code+".svg";
             return imgcode;
+        },
+        korea_check: function(){
+            if(this.country == "Korea/Japan"){
+                this.country = "Korea&Japan";
+                return this.country
+            };
+
+            return this.country.replace(/\s/g, '');
         }
     },
     mounted: function () {
@@ -151,7 +159,7 @@ var v = new Vue({
 
             var self = this;
             $.ajax({
-                url: data_publish_url + 'querybycountry/'+this.country,
+                url: data_publish_url + 'querybycountry/'+this.korea_check,
                 method: 'GET',
                 success: function (data) {
                     self.c=data[0];
