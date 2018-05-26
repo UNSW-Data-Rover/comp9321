@@ -173,7 +173,7 @@ def querybycountry(country):
             elif country == 'Russia':
                 region = 'Russian%20Federation'
             else:
-                region = country
+                region = country.replace(' ', '%20')
             url = 'http://data.un.org/CountryProfile.aspx/en/index.html/CountryProfile.aspx?crName=' + region
             with urllib.request.urlopen(url) as response:
                 html_data = response.read()
